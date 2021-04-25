@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://dubbo.apache.org/schema/dubbo
+       http://dubbo.apache.org/schema/dubbo/dubbo.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.3.xsd
+">
+
+    <!-- 1、指定当前服务/应用的名字（同样的服务名字相同，不要和别的服务同名） 一般直接使用该项目的名字 -->
+    <dubbo:application name="user-service-provider"  />
+
+    <!-- 2.配置注册中心，protocol是注册中心的类型 address就是地址，详细的注册中心配置
+        可以参考 https://dubbo.apache.org/zh/docs/v2.7/user/references/registry/zookeeper/
+     -->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" />
+
+    <!-- 3.声明需要调用远程服务的接口,跟provider.xml中的Dubbo：service的interface保持一致即可
+        id一般是首字母小写,这个到时候使用Autowired进行注入
+    -->
+    <dubbo:reference id="userService" interface="com.qiaoyansong.service.UserService" />
+    <!--引入DI注解解析器-->
+    <context:annotation-config/>
+    <!--引入IOC注解解析器-->
+    <context:component-scan base-package="com.qiaoyansong"/>
+</beans>
